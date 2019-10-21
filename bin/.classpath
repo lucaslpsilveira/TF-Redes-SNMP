@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="lib" path="/Users/jbredow/Downloads/snmp4j-2.8.0/dist/snmp4j-2.8.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
