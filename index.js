@@ -37,11 +37,11 @@ const bulkQuestions = () => {
     {
       name: "nonRepeaters",
       type: "input",
-      message: "Informe o numero de repetições:"
+      message: "Informe o numero de linhas da primeira repetição:"
     },{
       name: "maxRepetitions",
       type: "input",
-      message: "Informe o numero de variaveis sucessoras:"
+      message: "Informe o numero de linhas das sucessoras:"
     }
   ];
   return inquirer.prompt(questions);
@@ -113,6 +113,28 @@ const deltaQuestions = () => {
   ];
   return inquirer.prompt(questions);
 };
+
+const objectQuestions = () => {
+  const questions = [    
+    {
+      name: "oid",
+      type: "input",
+      message: "Informe o OID do objeto:"
+    }
+  ];
+  return inquirer.prompt(questions);
+}
+
+const qtdObjectQuestions = () => {
+  const questions = [    
+    {
+      name: "qtd",
+      type: "input",
+      message: "Informe o numero de objetos:"
+    }
+  ];
+  return inquirer.prompt(questions);
+}
 
 const menu = () => {
   const questions = [    
@@ -220,9 +242,17 @@ const run = async () => {
         }
         break;
       case "Get Bulk":        
-        const bulkAnswers = await bulkQuestions();
+        let oidsBulk = [];
+        const qtdAnswer = await qtdObjectQuestions();
+        const bulkOID = null;
+        let { qtd } = qtdAnswer;
+        for(let i=0; i<parseInt(qtd); i++){
+          byulkOID = await objectQuestions();
+          oidsBulk.push(String(bulkOID));
+        }
+        const bulkAnswers = await bulkQuestions();        
         let { nonRepeaters, maxRepetitions } = bulkAnswers;
-        session.getBulk (oids, parseInt(nonRepeaters), parseInt(maxRepetitions), function (error, varbinds) {
+        session.getBulk (oidsBulk, parseInt(nonRepeaters), parseInt(maxRepetitions), function (error, varbinds) {
           if (error) {
             console.error ('\n'+error.toString ());
             exit = true;            
@@ -328,9 +358,8 @@ const run = async () => {
         let { time, amostras } = deltaAnswers;      
         
         let counter = 0;
-        function get(){
-          var oidDelta = ['1.3.6.1.2.1.1.3.0'];
-          session.get (oidDelta, function (error, varbinds) {          
+        function get(){          
+          session.get (oids, function (error, varbinds) {          
             if (error) {
               console.error ('\n'+error.toString ());
               exit = true;            
